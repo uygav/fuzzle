@@ -1,0 +1,16 @@
+asgiref==3.7.2
+Django==4.2.4
+json5==0.9.11
+mistune==2.0.5
+pickleshare==0.7.5
+Pillow==10.0.0
+pure-eval==0.2.2
+pyodbc==4.0.39
+pywin32==306
+Send2Trash==1.8.0
+sqlparse==0.4.4
+typing_extensions==4.7.1
+tzdata==2023.3
+wcwidth==0.2.6
+webencodings==0.5.1
+y-py==0.5.9
