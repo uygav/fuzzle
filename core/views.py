@@ -5,14 +5,30 @@ from django.contrib import messages  # import for error message
 from django.http import HttpResponse
 # this import checks of user entered the page
 from django.contrib.auth.decorators import login_required
-from .models import Profile  # i imported Profile class
+from .models import Profile, Post  # i imported Profile class
 
 # Create your views here.
 
 
 @login_required(login_url='signin')  # user cannot access directly to main menu
 def index(request):
-    return render(request, 'index.html')
+    user_object = User.objects.get(username=request.user.username)
+    user_profile = Profile.objects.get(user=user_object)
+    return render(request, 'index.html', {'user_profile': user_profile})
+
+
+@login_required(login_url='signin')
+def upload(request):
+    if request.method == 'POST':
+        user = request.user.username
+        image = request.FILES.get('image_upload')
+        caption = request.POST['caption']
+        new_post = Post.objects.create(user=user, image=image, caption=caption)
+        new_post.save()
+
+        return redirect('/')
+    else:
+        return redirect('/')
 
 
 @login_required(login_url='signin')
