@@ -5,7 +5,7 @@ from django.contrib import messages  # import for error message
 from django.http import HttpResponse
 # this import checks of user entered the page
 from django.contrib.auth.decorators import login_required
-from .models import Profile, Post  # i imported Profile class
+from .models import Profile, Post, LikePost  # i imported Profile class
 
 # Create your views here.
 
@@ -30,6 +30,29 @@ def upload(request):
 
         return redirect('/')
     else:
+        return redirect('/')
+
+
+@login_required(login_url='signin')
+def like_post(request):
+    username = request.user.username
+    post_id = request.GET.get('post_id')
+
+    post = Post.objects.get(id=post_id)
+
+    like_filter = LikePost.objects.filter(
+        post_id=post_id, username=username).first()
+
+    if like_filter == None:
+        new_like = LikePost.objects.create(post_id=post_id, username=username)
+        new_like.save()
+        post.no_of_likes = post.no_of_likes + 1
+        post.save()
+        return redirect('/')
+    else:
+        like_filter.delete()
+        post.no_of_likes = post.no_of_likes - 1
+        post.save()
         return redirect('/')
 
 
